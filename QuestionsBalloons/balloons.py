@@ -4,18 +4,19 @@ for case in range(0, text_cases):
     test_info = raw_input("")
     total_qs = int(test_info.split(" ")[0])
     lies = int(test_info.split(" ")[1])
+    arrays = []
     for q in range(0, total_qs):
         question = raw_input("")
         answer = raw_input("")
         if "and" in question:
-            pass
+            arrays.append(generate_and(question))
         elif "or" in question:
             subs = question.split(" or ")
             lies = lies + len(subs) -1
             for sub in subs:
-                generate_array(sub.split(" "))
+                arrays.append(generate_array(sub.split(" ")))
         else: # single case
-            generate_array(question.split(" "))
+            arrays.append(generate_array(question.split(" ")))
 
 
 # generates array of length 14 with structure:
