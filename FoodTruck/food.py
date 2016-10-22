@@ -13,6 +13,7 @@ max_dist = float(input(""))
 temp = input("")
 last_dist = 0
 subs = []
+dists = []
 while True:
     try:
         temp = input("").split(",")
@@ -24,6 +25,7 @@ while True:
     last_dist = Haversine(m_lat, m_long, s_lat, s_long)
     if last_dist < max_dist:
         subs.append(str(s_num))
+        dists.append(float(last_dist))
 
 output = list(set(subs))
 output = list(map(int, output))
