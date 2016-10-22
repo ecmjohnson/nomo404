@@ -8,18 +8,23 @@ for x in range(0, test_cases):
     change = 0
 
     for i in range(0, sequence_length):
+        subsequence = sequence[i+1:sequence_length]
+
         if(brush1 == sequence[i] or brush2 == sequence[i]):
             pass
         else:
-            if(brush1 in sequence[i+1:sequence_length] and brush2 in sequence[i+1:sequence_length]):
-                pass
-            elif(brush1 in sequence[i+1:sequence_length] and ~(brush2 in sequence[i+1:sequence_length])):
+            if(brush1 in subsequence and brush2 in subsequence):
+                if(subsequence.index(brush1) > subsequence.index(brush2)):
+                    brush1 = sequence[i]
+                else:
+                    brush2 = sequence[i]
+            elif(brush1 in subsequence and ~(brush2 in subsequence)):
                 brush2 = sequence[i]
-                change += 1
-            elif(~(brush1 in sequence[i+1:sequence_length]) and brush2 in sequence[i+1:sequence_length]):
+            elif(~(brush1 in subsequence) and brush2 in subsequence):
                 brush1 = sequence[i]
-                change += 1
             else:
                 brush1 = sequence[i]
-                change += 1
-print(change)
+
+            change += 1
+
+        print(change)
