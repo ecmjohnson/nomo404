@@ -19,14 +19,19 @@ while True:
         temp = raw_input("").split(",")
     except EOFError:
         break
+    time = datetime.datetime.strptime(temp[0],'%m/%d/%Y %H:%M')
     s_lat = float(temp[1])
     s_long = float(temp[2])
     s_num = temp[3]
-    if s_num in saves:
-        pass
     last_dist = Haversine(m_lat, m_long, s_lat, s_long)
+    if s_num in saves:
+        conflict = [x for x in saves if s_num in x]
+        if time > conflict[2] and last_dist < max_dist:
+            pass
+        else:
+            del saves[saves.index(conflict)]
     if last_dist < max_dist:
-        saves.append([str(s_num), float(last_dist)])
+        saves.append([float(last_dist), str(s_num), time])
 
 
 # output = list(set(subs))
