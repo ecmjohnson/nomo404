@@ -5,15 +5,27 @@ def rprime(a,b):
         a,b = b, a%b
     return a == 1
 
+def coprimen(N,A,B):
+    # for K in range(A, B+1):
+    #     if rprime(N,K):
+    #         yield K
+    n = B
+    while n > A-1:
+       if rprime(N, n):
+           yield n
+       n = n - 1
+
 for case in range(0, int(test_cases)):
     temp = input("")
     N = int(temp.split(" ")[0])
     A = int(temp.split(" ")[1])
     B = int(temp.split(" ")[2])
 
-    accum = 0
-    for K in range(A, B+1):
-        if rprime(N,K):
-            accum += K
+    # accum = 0
+    # for K in range(A, B+1):
+    #     if rprime(N,K):
+    #         accum += K
+    # for val in coprimen(N,A,B):
+    #     print(val)
 
-    print(accum%1000000007)
+    print(sum(coprimen(N,A,B))%1000000007)
