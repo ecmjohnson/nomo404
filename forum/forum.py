@@ -21,7 +21,6 @@ def get_sum_last(arr):
         return arr[-1]
 
 def recursive_merging(sizes, bin_size):
-    import ipdb; ipdb.set_trace()
     if len(sizes) == 1:
         return sizes
     else:
@@ -58,6 +57,8 @@ def merge_func(arr1, arr2, bin_size):
         #  1. arr1[-1][-1] -> arr2
         #  2. arr2[0][-1] -> arr1
         #  3. arr1[-1][-1], arr2[0][-1] -> new_arr
+        #  4. full combination
+        #  5. leave separate
         arr1_val = get_sum_last(arr1)
         cs_1_1 = ER_curr1 - arr1_val; cs_1_2 = ER_curr2 + arr1_val;
         # cs_1_1 = ER_curr1 - arr1[-1][-1]; cs_1_2 = ER_curr2 + arr1[-1][-1];
@@ -95,7 +96,15 @@ def merge_func(arr1, arr2, bin_size):
             else:
                 return [arr1, [arr1[-1][-1], arr2[0][-1]], arr2]
         else:
-            return arr1+arr2
+            # import ipdb; ipdb.set_trace()
+            if type(arr1) is list and type(arr2) is list and len(arr1) != len(arr2):
+                error = sum(arr1) + sum(arr2)
+                if error > 1.7*bin_size:
+                    return [arr1]+[arr2]
+                else:
+                    return arr1 + arr2
+            else:
+                return [arr1]+[arr2]
 
 
 while True:
@@ -125,21 +134,8 @@ while True:
     post_sums = map(len, threads)
 
     assignment = recursive_merging(post_sums, posts_per_page)
-
+    # import ipdb; ipdb.set_trace()
     sums = map(sum, assignment)
     sums = [x - posts_per_page for x in sums]
     sums = map(math.fabs, sums)
-    print(max(sums))
-
-    # accum = 0; badness = [];
-    # for post_sum in post_sums:
-    #     if accum > posts_per_page:
-    #         badness.append(math.fabs(accum - posts_per_page)); accum = 0;
-    #     elif post_sum > posts_per_page:
-    #         badness.append(post_sum - posts_per_page)
-    #     elif post_sum + accum > posts_per_page:
-    #         badness.append(math.fabs(accum - posts_per_page)); accum = post_sum;
-    #     else:
-    #         accum += post_sum
-
-    # print(max(badness))
+    print(int(max(sums)))
