@@ -1,5 +1,5 @@
 import math
-
+import ipdb; ipdb.set_trace()
 temp = input("")
 out1 = temp
 base = int(temp.split(" ")[0])
@@ -25,7 +25,7 @@ rems = []
 last = result
 while last != 0:
     Q = math.floor(last/base)
-    rems.append(last%base)
+    rems.append(int(last%base))
     last = Q
 rems = list(reversed(rems))
 
@@ -35,5 +35,8 @@ num_out = [mapping[a] for a in rems]
 print(out1)
 print(out2)
 print(out3)
-print(input(""))
-print(' ' + ''.join(num_out))
+dashes = input("")
+dash_num = len(dashes)
+print(dashes)
+padding = dash_num - len(num_out)
+print(' '*padding + ''.join(num_out))
