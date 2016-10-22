@@ -1,7 +1,6 @@
 import math
 
 def recursive_merging(sizes, bin_size):
-    import pdb; pdb.set_trace()
     if len(sizes) == 1:
         return sizes
     else:
@@ -11,10 +10,20 @@ def recursive_merging(sizes, bin_size):
 def merge_func(arr1, arr2, bin_size):
     len1 = len(arr1); len2 = len(arr2);
     if len1 == len2 == 1: # trivial merge logic
-        ER_curr1 = math.fabs(arr1[0] - bin_size)
-        ER_curr2 = math.fabs(arr2[0] - bin_size)
-        ER_comb = math.fabs(arr1[0] + arr2[0] - bin_size)
+        if type(arr1[0]) is list:
+            arr1_val = sum(arr1[0])
+        else:
+            arr1_val = arr1[0]
+        if type(arr2[0]) is list:
+            arr2_val = sum(arr2[0])
+        else:
+            arr2_val = arr2[0]
+        ER_curr1 = math.fabs(arr1_val - bin_size)
+        ER_curr2 = math.fabs(arr2_val - bin_size)
+        ER_comb = math.fabs(arr1_val + arr2_val - bin_size)
         if ER_comb <= ER_curr1 and ER_comb <= ER_curr2:
+            return [arr1+arr2]
+        else:
             return [arr1, arr2]
     else:
         # we want to combine only the last elem of arr1 and first elem of arr2
@@ -58,7 +67,7 @@ def merge_func(arr1, arr2, bin_size):
 while True:
     # get the definitions for the next test case
     try:
-        temp = input("")
+        temp = raw_input("")
         posts_per_page = int(temp.split(" ")[0])
         num_posts = int(temp.split(" ")[1])
     except EOFError:
@@ -67,7 +76,7 @@ while True:
     # get the test case data
     threads = []
     for i in range(1, num_posts+1):
-        link = int(input(""))
+        link = int(raw_input(""))
         if i == 1: # this is the first post, must be 0
             threads.append([i])
         else:
@@ -80,11 +89,13 @@ while True:
 
     # sum reduce the threads array
     post_sums = list(map(len, threads))
-    import ipdb; ipdb.set_trace()
 
     assignment = recursive_merging(post_sums, posts_per_page)
 
-    print(assignment)
+    sums = list(map(sum, threads))
+    sums = [x - posts_per_page for x in sums]
+    sums = list(map(math.fabs, sums))
+    print(max(sums))
 
     # accum = 0; badness = [];
     # for post_sum in post_sums:
