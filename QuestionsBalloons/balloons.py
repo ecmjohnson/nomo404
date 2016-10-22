@@ -17,6 +17,8 @@ for case in range(0, text_cases):
                 arrays.append(generate_array(sub.split(" ")))
         else: # single case
             arrays.append(generate_array(question.split(" ")))
+    # do the processing for gneerating the output
+    pass
 
 
 # generates array of length 14 with structure:
