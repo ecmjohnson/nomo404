@@ -20,7 +20,7 @@ class mapping:
                 return cost_curr+1
 
     def goal_dist(self, x, y, x_goal, y_goal):
-        return math.sqrt(math.pow(x_goal-x,2)+math.pow(y_goal-y,2))
+        return (math.fabs(x_goal-x)+math.fabs(y_goal-y))
 
 
 # import and prepare the map
