@@ -26,17 +26,17 @@ while True:
     last_dist = Haversine(m_lat, m_long, s_lat, s_long)
     if s_num in saves:
         conflict = [x for x in saves if s_num in x]
-        if time > conflict[2] and last_dist < max_dist:
+        if time < conflict[2]:
             pass
         else:
             del saves[saves.index(conflict)]
     if last_dist < max_dist:
         saves.append([float(last_dist), str(s_num), time])
 
-
+saves.sort()
 # output = list(set(subs))
 # output = list(map(int, output))
 # output.sort()
 # output = list(map(str, output))
 # output = ",".join(output)
-print(output)
+print(saves)
