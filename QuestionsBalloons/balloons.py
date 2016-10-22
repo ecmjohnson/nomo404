@@ -13,14 +13,40 @@ for case in range(0, text_cases):
             subs = question.split(" or ")
             lies = lies + len(subs) -1
             for sub in subs:
-                generate_array(sub)
+                generate_array(sub.split(" "))
         else: # single case
-            generate_array(question)
+            generate_array(question.split(" "))
 
 
 # generates array of length 14 with structure:
 # first ten are chars (r,g or b)
 # next 3 are numbers in order r,g and b
 # and a flag: -1 for false, +1 for true
-def generate_array(info):
-    
+RED = 10; GREEN = 11; BLUE = 12;
+def generate_array(info_arr):
+    out_arr = [0]*14
+    if "colour" in info_arr:
+        index = int(info_arr[1])
+        out_arr[index] = info_arr[2]
+    else:
+        if info_arr[1] == "r":
+            out_arr[RED] = int(info_arr[2])
+        elif info_arr[1] == "g":
+            out_arr[GREEN] = int(info_arr[2])
+        else:
+            out_arr[BLUE] = int(info_arr[2])
+
+def generate_and(info_arr):
+    parts = info_arr.split(" and ")
+    out_arr = [0]*14
+    for part in parts:
+        if "colour" in info_arr:
+            index = int(info_arr[1])
+            out_arr[index] = info_arr[2]
+        else:
+            if info_arr[1] == "r":
+                out_arr[RED] += int(info_arr[2])
+            elif info_arr[1] == "g":
+                out_arr[GREEN] += int(info_arr[2])
+            else:
+                out_arr[BLUE] += int(info_arr[2])
