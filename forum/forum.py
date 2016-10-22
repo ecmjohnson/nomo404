@@ -1,13 +1,36 @@
 import math
 
+def get_sum_first(arr):
+    if type(arr) is int:
+        return arr
+    if type(arr[0]) is list:
+        if type(arr[0][0]) is list:
+            return sum(arr[0][0])
+        return sum(arr[0])
+    else:
+        return arr[0]
+
+def get_sum_last(arr):
+    if type(arr) is int:
+        return arr
+    if type(arr[-1]) is list:
+        if type(arr[-1][-1]) is list:
+            return sum(arr[-1][-1])
+        return sum(arr[-1])
+    else:
+        return arr[-1]
+
 def recursive_merging(sizes, bin_size):
+    import ipdb; ipdb.set_trace()
     if len(sizes) == 1:
         return sizes
     else:
         arr1 = sizes[:len(sizes)/2]; arr2 = sizes[len(sizes)/2:];
         return merge_func(recursive_merging(arr1, bin_size), recursive_merging(arr2, bin_size), bin_size)
 
+# arr1 and arr2 should be only lists of lists of integers
 def merge_func(arr1, arr2, bin_size):
+    # import ipdb; ipdb.set_trace()
     len1 = len(arr1); len2 = len(arr2);
     if len1 == len2 == 1: # trivial merge logic
         if type(arr1[0]) is list:
@@ -22,18 +45,22 @@ def merge_func(arr1, arr2, bin_size):
         ER_curr2 = math.fabs(arr2_val - bin_size)
         ER_comb = math.fabs(arr1_val + arr2_val - bin_size)
         if ER_comb <= ER_curr1 and ER_comb <= ER_curr2:
-            return [arr1+arr2]
+            return arr1+arr2 # already lists
         else:
             return [arr1, arr2]
     else:
         # we want to combine only the last elem of arr1 and first elem of arr2
-        ER_curr1 = sum(arr1[-1]) - bin_size; ER_curr2 = sum(arr2[0]) - bin_size;
+        arr1_val = get_sum_last(arr1); arr2_val = get_sum_first(arr2);
+        ER_curr1 = arr1_val - bin_size; ER_curr2 = arr2_val - bin_size;
+        # ER_curr1 = sum(arr1[-1]) - bin_size; ER_curr2 = sum(arr2[0]) - bin_size;
         # we only need to consider re-allocating the inside elements of arrs
         # three cases:
         #  1. arr1[-1][-1] -> arr2
         #  2. arr2[0][-1] -> arr1
         #  3. arr1[-1][-1], arr2[0][-1] -> new_arr
-        cs_1_1 = ER_curr1 - arr1[-1][-1]; cs_1_2 = ER_curr2 + arr1[-1][-1];
+        arr1_val = get_sum_last(arr1)
+        cs_1_1 = ER_curr1 - arr1_val; cs_1_2 = ER_curr2 + arr1_val;
+        # cs_1_1 = ER_curr1 - arr1[-1][-1]; cs_1_2 = ER_curr2 + arr1[-1][-1];
         if cs_1_1 <= ER_curr1 and cs_1_2 <= ER_curr2:
             arr2[0].append(arr1[-1][-1])
             del arr1[-1][-1]
@@ -41,7 +68,9 @@ def merge_func(arr1, arr2, bin_size):
                 return [arr2]
             else:
                 return [arr1, arr2]
-        cs_2_1 = ER_curr1 + arr2[0][-1]; cs_2_2 = ER_curr2 - arr2[0][-1];
+        arr2_val = get_sum_last(arr2[0])
+        cs_2_1 = ER_curr1 + arr2_val; cs_2_2 = ER_curr2 - arr2_val;
+        # cs_2_1 = ER_curr1 + arr2[0][-1]; cs_2_2 = ER_curr2 - arr2[0][-1];
         if cs_2_1 <= ER_curr1 and cs_2_2 <= ER_curr2:
             arr1[-1].append(arr2[0][-1])
             del arr2[0][-1]
@@ -49,8 +78,11 @@ def merge_func(arr1, arr2, bin_size):
                 return [arr1]
             else:
                 return [arr1, arr2]
-        cs_3_1 = ER_curr1 - arr1[-1][-1]; cs_3_2 = ER_curr2 - arr2[0][-1];
-        cs_3_3 = math.fabs(arr1[-1][-1] + arr2[0][-1] - bin_size)
+        arr1_val = get_sum_last(arr1); arr2_val = get_sum_last(arr2[0]);
+        cs_3_1 = ER_curr1 - arr1_val; cs_3_2 = ER_curr2 - arr2_val;
+        # cs_3_1 = ER_curr1 - arr1[-1][-1]; cs_3_2 = ER_curr2 - arr2[0][-1];
+        cs_3_3 = math.fabs(arr1_val + arr2_val - bin_size)
+        # cs_3_3 = math.fabs(arr1[-1][-1] + arr2[0][-1] - bin_size)
         if cs_3_1 <= ER_curr1 and cs_3_2 <= ER_curr2 and cs_3_3 <= ER_curr1 and cs_3_3 <= ER_curr2:
             if len(arr1[-1]) == 0 and len(arr2[0]) == 0:
                 return [arr1[-1][-1], arr2[0][-1]]
@@ -62,6 +94,8 @@ def merge_func(arr1, arr2, bin_size):
                 return [arr1, [arr1[-1][-1], arr2[0][-1]]]
             else:
                 return [arr1, [arr1[-1][-1], arr2[0][-1]], arr2]
+        else:
+            return arr1+arr2
 
 
 while True:
@@ -88,13 +122,13 @@ while True:
                         threads[threads.index(thread)].append(i)
 
     # sum reduce the threads array
-    post_sums = list(map(len, threads))
+    post_sums = map(len, threads)
 
     assignment = recursive_merging(post_sums, posts_per_page)
 
-    sums = list(map(sum, threads))
+    sums = map(sum, assignment)
     sums = [x - posts_per_page for x in sums]
-    sums = list(map(math.fabs, sums))
+    sums = map(math.fabs, sums)
     print(max(sums))
 
     # accum = 0; badness = [];
