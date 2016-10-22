@@ -65,10 +65,11 @@ for query in range(0, Q):
                     elif cost[x][y] == min_cost:
                         candidates.append([x,y])
         # update x_curr, y_curr to be new source
-        min_dist = 10000
-        for can in candidates:
-            dist = chart.goal_dist(can[0], can[1], x2, y2)
-            if dist < min_dist:
-                x_curr = can[0]; y_curr = can[1]
+        
+        # min_dist = 10000
+        # for can in candidates:
+        #     dist = chart.goal_dist(can[0], can[1], x2, y2)
+        #     if dist < min_dist:
+        #         x_curr = can[0]; y_curr = can[1]
 
     print(cost[x2][y2])
